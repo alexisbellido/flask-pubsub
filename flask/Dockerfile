@@ -1,6 +1,6 @@
 FROM python:3.7.6-slim-buster as builder
 
-WORKDIR /code
+WORKDIR /root
 
 RUN set -e \
   && apt-get update \
@@ -26,5 +26,11 @@ ENV FLASK_APP app.py
 ENV FLASK_RUN_HOST 0.0.0.0
 ENV FLASK_RUN_PORT=5000
 
-COPY . .
-ENTRYPOINT ["/code/docker-entrypoint.sh"]
+ENV PROJECT_DIR=/root/project
+
+COPY project $PROJECT_DIR
+
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+WORKDIR /root/project
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

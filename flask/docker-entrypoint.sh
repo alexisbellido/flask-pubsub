@@ -11,6 +11,7 @@ export FLASK_RUN_PORT=$FLASK_RUN_PORT
 if [ "$1" == "development" ]; then
     echo "Running in development mode..."
     export FLASK_ENV=development
+    cd $PROJECT_DIR
 	exec flask run
 else
 	exec "$@"

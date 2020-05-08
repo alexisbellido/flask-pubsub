@@ -1,11 +1,12 @@
 Publisher and subscriber with Flask and Redis
 ==================================================================
 
+A simple publisher subcriber API using Flask, Redis and Docker.
 
 Docker notes
 ---------------------------------------------
 
- Build Flask Docker image.
+Build Flask Docker image.
 
 .. code-block:: bash
 
@@ -16,9 +17,35 @@ Launch and SSH into Flask container.
 
 .. code-block:: bash
 
-    $ docker run -it --rm --mount type=bind,source=$PWD,target=/code zinibu/python:3.7.6 bash
+    $ cd flask/project
+    $ docker run -it --rm --mount type=bind,source=$PWD,target=/root/project zinibu/python:3.7.6 bash
 
-Run Flask in development mode.
+
+Launch and ssh via docker-entrypoint.sh.
+
 .. code-block:: bash
 
-    $ docker run --rm --mount type=bind,source=$PWD,target=/code -p 5000:5000 zinibu/python:3.7.6 -- /code/docker-entrypoint.sh development
+    $ cd flask/project
+    $ docker run -it --rm --mount type=bind,source=$PWD,target=/root/project -p 5000:5000 zinibu/python:3.7.6 -- /usr/local/bin/docker-entrypoint.sh bash
+
+
+Run Flask in development mode.
+
+.. code-block:: bash
+
+    $ cd flask/project
+    $ docker run --rm --mount type=bind,source=$PWD,target=/root/project -p 5000:5000 zinibu/python:3.7.6 -- /usr/local/bin/docker-entrypoint.sh development
+
+
+Start with Docker Compose by going to the root of the project.
+
+.. code-block:: bash
+
+    $ docker-compose up
+
+Once the containers are running you can ssh into any of them.
+
+.. code-block:: bash
+
+    $ docker exec -it pubsub_app_1 bash
+    $ docker exec -it pubsub_redis_1 bash

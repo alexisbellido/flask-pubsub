@@ -8,9 +8,15 @@ services:
     command: development
     ports:
       - "5000:5000"
+    volumes:
+      # bind mount for development
+      - type: bind
+        source: ./flask/project
+        target: /root/project
+
     depends_on:
       - redis
   redis:
     image: redis:5.0.3
-    # ports:
-    #   - "6379:6379"
+    ports:
+      - "6379:6379"
