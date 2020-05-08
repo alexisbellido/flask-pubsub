@@ -22,4 +22,11 @@ def get_hit_count():
 @app.route('/')
 def hello():
     count = get_hit_count()
-    return 'Hello World! I have been seen {} times.\n'.format(count)
+
+    # cache.set('color', 'red');
+    try:
+        color = cache.get('color').decode("utf-8")
+    except AttributeError:
+        color = 'not set'
+
+    return 'Hello World! I have been seen {} times. Color: {}\n'.format(count, color)
