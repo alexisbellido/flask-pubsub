@@ -19,12 +19,14 @@ COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip \
   && pip install --no-cache-dir -r requirements.txt
 
+ENV PYTHONUNBUFFERED 1
+
 ENV REDIS_HOST 0.0.0.0
 ENV REDIS_PORT 6379
 
 ENV FLASK_APP app.py
 ENV FLASK_RUN_HOST 0.0.0.0
-ENV FLASK_RUN_PORT=5000
+ENV FLASK_RUN_PORT=8000
 
 ENV PROJECT_DIR=/root/project
 

@@ -1,32 +1,39 @@
-import time
+from markupsafe import escape
 
-import redis
 from flask import Flask
+from flask import request
 
 app = Flask(__name__)
-r = redis.Redis(host='redis', port=6379)
 
 
-def get_hit_count():
-    retries = 5
-    while True:
-        try:
-            return r.incr('hits')
-        except redis.exceptions.ConnectionError as exc:
-            if retries == 0:
-                raise exc
-            retries -= 1
-            time.sleep(0.5)
+@app.route('/', methods=['GET'])
+def index():
+    output = 'Index Page.'
+    return output
+
+@app.route('/subscribe/<topic>', methods=['POST'])
+def subscribe(topic):
+    topic = escape(topic)
+    if request.method == 'POST':
+        print(list)
+        json_data = request.get_json()
+        list.append(json_data['url'])
+        print(list)
+        result = {
+            'topic': topic,
+            'url': json_data['url'],
+        }
+        return result
 
 
-@app.route('/')
-def hello():
-    count = get_hit_count()
+@app.route('/publish/<topic>', methods=['POST'])
+def publish(topic):
+    topic = escape(topic)
+    if request.method == 'POST':
+        json_data = request.get_json()
+        result = {
+            'topic': topic,
+            'message': json_data['message'],
+        }
+        return result
 
-    # r.set('color', 'red');
-    try:
-        color = r.get('color').decode("utf-8")
-    except AttributeError:
-        color = 'not set'
-
-    return 'Hello World! I have been seen {} times. Color: {}\n'.format(count, color)

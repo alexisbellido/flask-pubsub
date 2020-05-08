@@ -7,7 +7,7 @@ services:
     #   context: ./flask
     command: development
     ports:
-      - "5000:5000"
+      - "8000:8000"
     volumes:
       # bind mount for development
       - type: bind
