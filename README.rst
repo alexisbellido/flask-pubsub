@@ -1,7 +1,15 @@
 Publisher and subscriber with Flask and Redis
 ==================================================================
 
-A simple publisher subcriber API using Flask, Redis and Docker.
+A simple publisher subcriber API using Python, Flask and Docker.
+
+[Include usage instructions]
+
+
+Notes on publishing and subscribing
+---------------------------------------------
+
+I'm keeping track of subscription channels and messages with Python data types but an alternate approach could use `Redis-py <https://github.com/andymccurdy/redis-py/#publish--subscribe>`_ to manage publishing and subscribing.
 
 Docker notes
 ---------------------------------------------
