@@ -1,19 +1,29 @@
 Publisher and subscriber with Flask and Redis
 ==================================================================
 
-A simple publisher subcriber API using Python, Flask, Redis and Docker.
+A simple publisher subscriber API using Python, Flask, Redis and Docker. Please see the installation instructions below in the next section.
 
-Notes on publishing and subscribing
----------------------------------------------
+I'm keeping track of subscribing and publishing to channels using Redis and `Redis-py <https://github.com/andymccurdy/redis-py/#publish--subscribe>`_. If you open the Redis client and `subscribe to a channel <https://redis.io/topics/pubsub>`_ corresponding to a topic you'll see the messages.
 
-I'm keeping track of subscription channels and messages with Python data types but an alternate approach could use `Redis-py <https://github.com/andymccurdy/redis-py/#publish--subscribe>`_ to manage publishing and subscribing.
+I'm also using Redis lists to keep track of the event URLs associated with each topic.
+
+You can test with the following curl commands.
 
 .. code-block:: bash
 
     $ curl -X POST -H "Content-Type: application/json" -d '{ "url": "http://localhost:8000/event"}' http://localhost:8000/subscribe/topic1
     $ curl -X POST -H "Content-Type: application/json" -d '{"message": "hello"}' http://localhost:8000/publish/topic1
+    $ curl -X GET http://localhost:8000/event
 
-Docker notes
+I also included a few basic unit tests.
+
+.. code-block:: bash
+
+    $ python tests.py
+
+Note that this is just a proof of concept and it's not considering edge cases or full test coverage.
+
+Installation and Docker notes
 ---------------------------------------------
 
 Build Flask Docker image.
@@ -30,7 +40,6 @@ Launch and SSH into Flask container.
     $ cd flask/project
     $ docker run -it --rm --mount type=bind,source=$PWD,target=/root/project zinibu/python:3.7.6 bash
 
-
 Launch and ssh via docker-entrypoint.sh.
 
 .. code-block:: bash
@@ -38,14 +47,12 @@ Launch and ssh via docker-entrypoint.sh.
     $ cd flask/project
     $ docker run -it --rm --mount type=bind,source=$PWD,target=/root/project -p 5000:5000 zinibu/python:3.7.6 -- /usr/local/bin/docker-entrypoint.sh bash
 
-
 Run Flask in development mode.
 
 .. code-block:: bash
 
     $ cd flask/project
     $ docker run --rm --mount type=bind,source=$PWD,target=/root/project -p 5000:5000 zinibu/python:3.7.6 -- /usr/local/bin/docker-entrypoint.sh development
-
 
 Start with Docker Compose by going to the root of the project.
 
@@ -60,9 +67,3 @@ Once the containers are running you can ssh into any of them.
     $ docker exec -it pubsub_app_1 bash
     $ docker exec -it pubsub_redis_1 bash
 
-TODO
----------------------------------------------
-
-Add Redis support
-Include usage instructions
-Add unit tests
