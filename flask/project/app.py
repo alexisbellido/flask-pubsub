@@ -1,10 +1,16 @@
 from markupsafe import escape
 
+import redis
+import json
+
 from flask import Flask
 from flask import request
 
 app = Flask(__name__)
 
+def get_connection():
+    r = redis.Redis(host='redis', port=6379, decode_responses=True)
+    return r
 
 @app.route('/', methods=['GET'])
 def index():
@@ -15,14 +21,15 @@ def index():
 def subscribe(topic):
     topic = escape(topic)
     if request.method == 'POST':
-        print(list)
         json_data = request.get_json()
-        list.append(json_data['url'])
-        print(list)
+        r = get_connection()
+        p = r.pubsub()
+        p.subscribe(topic)
         result = {
             'topic': topic,
             'url': json_data['url'],
         }
+        p.close()
         return result
 
 
@@ -30,10 +37,15 @@ def subscribe(topic):
 def publish(topic):
     topic = escape(topic)
     if request.method == 'POST':
-        json_data = request.get_json()
+        json_data = json.dumps(request.get_json())
+        serialized_data = json.dumps(json_data)
+        r = get_connection()
+        r.publish(topic, serialized_data)
+        # r.publish(topic, json_data['message'])
         result = {
             'topic': topic,
-            'message': json_data['message'],
+            'serialized_data': serialized_data,
+            # 'message': json_data['message'],
         }
         return result
 
