@@ -13,6 +13,14 @@ color = r.get('color')
 print('color:', color)
 # print('color:', color.decode("utf-8"))
 
+# using lists
+
+r.delete('names')
+r.rpush('names', 'tim')
+r.rpush('names', 'peter')
+data = r.lrange('names', 0, -1)
+print(data)
+
 # Create a PubSub instance
 p = r.pubsub()
 
