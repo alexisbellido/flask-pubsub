@@ -7,6 +7,27 @@ I'm keeping track of subscribing and publishing to channels using Redis and `Red
 
 I'm also using Redis lists to keep track of the event URLs associated with each topic.
 
+Installation
+---------------------------------------------
+
+Build Flask Docker image.
+
+.. code-block:: bash
+
+    $ cd flask
+    $ docker build -t zinibu/python:3.7.6 .
+
+Start with Docker Compose from the root of the project.
+
+.. code-block:: bash
+
+    $ docker-compose up
+
+That's it. You can now use the endpoints described below.
+
+Usage
+--------------------------------------------
+
 You can test with the following curl commands.
 
 .. code-block:: bash
@@ -21,19 +42,12 @@ I also included a few basic unit tests.
 
     $ python tests.py
 
-Note that this is just a proof of concept and it's not considering edge cases or full test coverage.
+This is just a proof of concept. It doesn't consider edge cases and has incomplete test coverage.
 
-Installation and Docker notes
+Docker notes
 ---------------------------------------------
 
-Build Flask Docker image.
-
-.. code-block:: bash
-
-    $ cd flask
-    $ docker build -t zinibu/python:3.7.6 .
-
-Launch and SSH into Flask container.
+Launch and ssh into Flask container.
 
 .. code-block:: bash
 
@@ -54,16 +68,9 @@ Run Flask in development mode.
     $ cd flask/project
     $ docker run --rm --mount type=bind,source=$PWD,target=/root/project -p 5000:5000 zinibu/python:3.7.6 -- /usr/local/bin/docker-entrypoint.sh development
 
-Start with Docker Compose by going to the root of the project.
-
-.. code-block:: bash
-
-    $ docker-compose up
-
 Once the containers are running you can ssh into any of them.
 
 .. code-block:: bash
 
     $ docker exec -it pubsub_app_1 bash
     $ docker exec -it pubsub_redis_1 bash
-
